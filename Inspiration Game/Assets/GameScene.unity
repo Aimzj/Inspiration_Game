@@ -43,7 +43,7 @@ RenderSettings:
 LightmapSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 11
-  m_GIWorkflowMode: 0
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -89,7 +89,8 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000002, guid: dafc2b5b38ab0c24291c3c2ed2063698,
+    type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
@@ -239,10 +240,9 @@ GameObject:
   - component: {fileID: 363525986}
   - component: {fileID: 363525985}
   - component: {fileID: 363525984}
-  - component: {fileID: 363525987}
   m_Layer: 0
   m_Name: SmallHit
-  m_TagString: Untagged
+  m_TagString: Hit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -314,18 +314,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 363525982}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &363525987
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 363525982}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75770c0d8aeb4a04ab95a406c6aefe6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isParrying: 0
 --- !u!1 &539464839
 GameObject:
   m_ObjectHideFlags: 0
@@ -383,10 +371,9 @@ GameObject:
   - component: {fileID: 581398485}
   - component: {fileID: 581398484}
   - component: {fileID: 581398483}
-  - component: {fileID: 581398486}
   m_Layer: 0
   m_Name: BigHit
-  m_TagString: Untagged
+  m_TagString: Hit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -458,18 +445,6 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 581398481}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &581398486
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 581398481}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75770c0d8aeb4a04ab95a406c6aefe6e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isParrying: 0
 --- !u!1 &723470203
 GameObject:
   m_ObjectHideFlags: 0
@@ -590,6 +565,8 @@ MonoBehaviour:
   rotationSpeed: 1
   bigReload: 1
   smallReload: 0.5
+  isParrying: 0
+  isControllerConnected: 0
 --- !u!1 &992752494
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,14 +588,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 992752494}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.9875398, y: 0.6799495, z: -3.15}
+  m_LocalRotation: {x: -0, y: 0.23838751, z: -0, w: 0.9711702}
+  m_LocalPosition: {x: 3.4785378, y: 0.6799495, z: -3.2402654}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 723470208}
   m_Father: {fileID: 0}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 27.583002, z: 0}
 --- !u!1 &1022339512
 GameObject:
   m_ObjectHideFlags: 0
@@ -892,7 +869,7 @@ GameObject:
   - component: {fileID: 2116011374}
   m_Layer: 0
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
