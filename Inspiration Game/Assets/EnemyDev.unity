@@ -548,6 +548,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 1295332246668976, guid: 59891562f9d28f04094fdac275ca3da3, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 59891562f9d28f04094fdac275ca3da3, type: 2}
   m_IsPrefabParent: 0
@@ -1583,7 +1587,10 @@ MonoBehaviour:
   rotationSpeed: 1
   bigReload: 1
   smallReload: 0.5
-  isParrying: 0
+  bigHitDuration: 0
+  smallHitDuration: 0
+  isBigParry: 0
+  isSmallParry: 0
   isControllerConnected: 0
 --- !u!1 &792549544
 GameObject:

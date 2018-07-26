@@ -33,13 +33,9 @@ public class BulletController : MonoBehaviour {
 
     private void OnTriggerStay(Collider other)
     {
-		if (other.CompareTag("Hit") && playerScript.isParrying && !isPlayerBullet)
+        if (other.CompareTag("Hit") && !isPlayerBullet)
         {
-			isPlayerBullet = true;
-			//gameObject.SetActive(false);
-			transform.up = Vector3.Reflect (transform.up, playerTrans.forward);
-			//transform.Rotate(0, 0, 125);
-			if(playerScript.isBigParry)
+            if(playerScript.isBigParry)
             {
                 transform.up = Vector3.Reflect(transform.up, playerTrans.forward);
                 isPlayerBullet = true;
