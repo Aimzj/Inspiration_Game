@@ -34,14 +34,15 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
         InputDevice inDevice = InputManager.ActiveDevice;
         //Debug.Log(Input.GetJoystickNames()[0]);
-        if (Input.GetJoystickNames()[0] != "Wireless Controller")
-        {
-            isControllerConnected = false;
-        }
-        else
-        {
-            isControllerConnected = true;
-        }
+		//if (Input.GetJoystickNames() != null)
+		//if (Input.GetJoystickNames()[0] != "Wireless Controller")
+        //{
+        //    isControllerConnected = false;
+        //}
+        //else
+        //{
+        //    isControllerConnected = true;
+        //}
 
         //movement
         if (isControllerConnected)
