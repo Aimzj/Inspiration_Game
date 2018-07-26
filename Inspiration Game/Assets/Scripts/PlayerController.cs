@@ -5,21 +5,22 @@ using InControl;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
-    public float playerSpeed, rotationSpeed, bigReload, smallReload;
-    public bool isParrying, isControllerConnected;
+    public float playerSpeed, rotationSpeed, bigReload, smallReload, bigHitDuration, smallHitDuration;
+    public bool isBigParry, isSmallParry, isControllerConnected;
 
     private Vector3 dir;
     private Transform player, playerBody, lookTarget;
-    private MeshRenderer bigHit, smallHit;
+    private MeshRenderer bigHitMesh, smallHitMesh;
     private bool canBigHit, canSmallHit;
     private float bigTimer, smallTimer;
+    private Rigidbody playerRB;
 	// Use this for initialization
 	void Start () {
         player = GameObject.Find("Player").GetComponent<Transform>();
         playerBody = GameObject.Find("PlayerBody").GetComponent<Transform>();
         lookTarget = GameObject.Find("LookTarget").GetComponent<Transform>();
-        bigHit = GameObject.Find("BigHit").GetComponent<MeshRenderer>();
-        smallHit = GameObject.Find("SmallHit").GetComponent<MeshRenderer>();
+        bigHitMesh = GameObject.Find("BigHit").GetComponent<MeshRenderer>();
+        smallHitMesh = GameObject.Find("SmallHit").GetComponent<MeshRenderer>();
 
         canBigHit = false;
         canSmallHit = false;
@@ -33,22 +34,19 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         InputDevice inDevice = InputManager.ActiveDevice;
-        //Debug.Log(Input.GetJoystickNames()[0]);
-		//if (Input.GetJoystickNames() != null)
-		//if (Input.GetJoystickNames()[0] != "Wireless Controller")
-        //{
-        //    isControllerConnected = false;
-        //}
-        //else
-        //{
-        //    isControllerConnected = true;
-        //}
 
-        //movement
-        if (isControllerConnected)
+        Debug.Log(Input.GetJoystickNames()[1]);
+        if (Input.GetJoystickNames()[0] != "Wireless Controller")
         {
-            player.Translate(playerSpeed * inDevice.LeftStickX, 0, playerSpeed * inDevice.LeftStickY);
+            isControllerConnected = false;
         }
+        else
+        {
+            isControllerConnected = true;
+        }
+
+        player.Translate(playerSpeed * inDevice.LeftStickX, 0, playerSpeed * inDevice.LeftStickY);
+    
         
 
         //rotation
@@ -72,25 +70,27 @@ public class PlayerController : MonoBehaviour {
         if (bigTimer>=bigReload)
         {
             canBigHit = true;
+            bigTimer = 0;
         }
 
         smallTimer += Time.deltaTime;
         if (smallTimer >= smallReload)
         {
             canSmallHit = true;
+            smallTimer = 0;
         }
 
         //parrying
         if (inDevice.RightTrigger.IsPressed && canBigHit)
         {
-            canBigHit = false;
-            StartCoroutine(ShowHit(bigHit));
+            
+            StartCoroutine(ShowBigHit());
         }
 
         if (inDevice.RightBumper.IsPressed && canSmallHit)
         {
-            canSmallHit = false;
-            StartCoroutine(ShowHit(smallHit));
+            
+            StartCoroutine(ShowSmallHit());
         }
 
         //restart game
@@ -100,13 +100,24 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    IEnumerator ShowHit(MeshRenderer mesh)
+    IEnumerator ShowBigHit()
     {
-        mesh.enabled = true;
-        isParrying = true;   
-        yield return new WaitForSecondsRealtime(0.2f);
-        mesh.enabled = false;
-        isParrying = false;
+        canBigHit = false;
+        bigHitMesh.enabled = true;
+        isBigParry = true;
+        yield return new WaitForSecondsRealtime(bigHitDuration);
+        isBigParry = false;
+        bigHitMesh.enabled = false;
+    }
+
+    IEnumerator ShowSmallHit()
+    {
+        canSmallHit = false;
+        smallHitMesh.enabled = true;
+        isSmallParry = true;
+        yield return new WaitForSecondsRealtime(smallHitDuration);
+        isSmallParry = false;
+        smallHitMesh.enabled = false;
     }
 
     private void FixedUpdate()
