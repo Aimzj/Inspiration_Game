@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 114597372685418576}
   - component: {fileID: 54088634953193394}
   m_Layer: 0
-  m_Name: Bullet
+  m_Name: GoonBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
