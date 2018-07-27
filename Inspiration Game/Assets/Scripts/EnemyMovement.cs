@@ -150,7 +150,10 @@ public class EnemyMovement : MonoBehaviour {
 	void Fire()
 	{
 		GameObject newBullet = Instantiate (bulletPref, transform.position + transform.forward*1.5f, bulletPref.transform.rotation);
-		newBullet.GetComponent<BulletController> ().direction = gameObject.transform.forward;
+		if (enemyType != EnemyType.All_Rounder)
+		{
+			newBullet.GetComponent<BulletController> ().direction = gameObject.transform.forward;
+		}
 		Invoke ("continueMoving", recoilDelay);
 	}
 
