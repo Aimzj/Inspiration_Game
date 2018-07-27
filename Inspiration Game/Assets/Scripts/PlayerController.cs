@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour {
 	private bool canBigHit, canSmallHit;
 	private float bigTimer, smallTimer;
 	private Rigidbody playerRB;
+	private Vector3 destination;
 	// Use this for initialization
 	void Start () {
 		player = GameObject.Find("Player").GetComponent<Transform>();
@@ -29,12 +30,14 @@ public class PlayerController : MonoBehaviour {
 		smallTimer = 0;
 
 		isControllerConnected = false;
+
+		destination = Vector3.zero;
 	}
 
 	// Update is called once per frame
 	void Update () {
 		InputDevice inDevice = InputManager.ActiveDevice;
-		/*Debug.Log(Input.GetJoystickNames()[1]);
+		/*Debug.Log(Input.GetJoystickNames().Length);
 		if (Input.GetJoystickNames()[0] != "Wireless Controller")
 		{
 			isControllerConnected = false;
@@ -43,10 +46,6 @@ public class PlayerController : MonoBehaviour {
 		{
 			isControllerConnected = true;
 		}*/
-
-		player.Translate(playerSpeed * inDevice.LeftStickX, 0, playerSpeed * inDevice.LeftStickY);
-
-
 
 		//rotation
 		if(Mathf.Abs(inDevice.RightStick.Vector.normalized.magnitude) > 0.05f)
@@ -60,9 +59,10 @@ public class PlayerController : MonoBehaviour {
 			dir.z = inDevice.LeftStickY;
 		}
 		dir.y = 0;
-
-
 		playerBody.rotation = Quaternion.LookRotation(dir);
+
+		//movement
+		player.Translate(playerSpeed * inDevice.LeftStickX, 0, playerSpeed * inDevice.LeftStickY);
 
 		//adjust reload time
 		bigTimer += Time.deltaTime;
@@ -82,13 +82,15 @@ public class PlayerController : MonoBehaviour {
 		//parrying
 		if (inDevice.RightTrigger.IsPressed && canBigHit)
 		{
-
+			destination = Vector3.forward;
+			// StartCoroutine(MoveForward(transform.position, destination, 1));
 			StartCoroutine(ShowBigHit());
 		}
 
 		if (inDevice.RightBumper.IsPressed && canSmallHit)
 		{
-
+			destination = Vector3.forward;
+			// StartCoroutine(MoveForward(transform.position, destination, 1));
 			StartCoroutine(ShowSmallHit());
 		}
 
@@ -117,6 +119,24 @@ public class PlayerController : MonoBehaviour {
 		yield return new WaitForSecondsRealtime(smallHitDuration);
 		isSmallParry = false;
 		smallHitMesh.enabled = false;
+	}
+
+
+	//Lerping code adapted from:
+	//https://hackernoon.com/lerping-with-coroutines-and-animation-curves-4185b30f6002
+
+	IEnumerator MoveForward( Vector3 origin, Vector3 target, float duration)
+	{
+		float journey = 0f;
+		while (journey <= duration)
+		{
+			journey = journey + Time.deltaTime;
+			float percent = Mathf.Clamp01(journey / duration);
+
+			transform.localPosition = Vector3.Lerp(origin, target, percent);
+
+			yield return null;
+		}
 	}
 
 	private void FixedUpdate()
