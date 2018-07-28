@@ -140,12 +140,33 @@ public class EnemyMovement : MonoBehaviour {
 			}
 		}
 
-		if (health <= 0) 
-		{
-			agent.isStopped = true;
-			//die
-		}
+		
 	}
+
+
+
+    public void HurtEnemy()
+    {
+        this.health--;
+
+        if (health <= 0)
+        {
+            agent.isStopped = true;
+            if (enemyType == EnemyType.GoonBot)
+            {
+                EnemySpawner enemySpawnScript = GameObject.Find("GoonSpawner").GetComponent<EnemySpawner>();
+                enemySpawnScript.NumEnemies--;
+                this.gameObject.SetActive(false);
+            }
+            else if (enemyType == EnemyType.Fodderbot)
+            {
+                EnemySpawner enemySpawnScript = GameObject.Find("FodderSpawner").GetComponent<EnemySpawner>();
+                enemySpawnScript.NumEnemies--;
+                this.gameObject.SetActive(false);
+            }
+            //die
+        }
+    }
 
 	void Fire()
 	{
@@ -164,6 +185,19 @@ public class EnemyMovement : MonoBehaviour {
 		isFiring = false;
 		//agent.isStopped = false;
 	}
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Bullet"))
+        {
+            BulletController bulletScript = collision.gameObject.GetComponent<BulletController>();
+            if (bulletScript.isPlayerBullet)
+            {
+                Destroy(collision.gameObject);
+                HurtEnemy();
+            }
+        }
+    }
 }
 
 //tomorrow, after each shot randomise the enemy's position a little.

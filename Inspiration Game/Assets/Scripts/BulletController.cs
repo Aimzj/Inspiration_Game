@@ -6,9 +6,9 @@ public class BulletController : MonoBehaviour {
     public float bulletSpeed;
 	public Vector3 direction = Vector3.up;
 	public float lifeTime = 10;                //how long the bullet can exist for in seconds
+    public bool isPlayerBullet;
 
     private PlayerController playerScript;
-    private bool isPlayerBullet;
     private Transform playerTrans;
 	// Use this for initialization
 	void Start () {
@@ -66,6 +66,7 @@ public class BulletController : MonoBehaviour {
 		{
 			destroyBullet ();
 		}
+
 	}
 
 	void destroyBullet()
