@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour {
     public float playerSpeed, rotationSpeed, bigReload, smallReload, bigHitDuration, smallHitDuration;
     public bool isBigParry, isSmallParry, isControllerConnected;
+    public float playerHealth;
 
     private Vector3 dir;
     private Transform player, playerBody, lookTarget;
@@ -37,32 +38,52 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         InputDevice inDevice = InputManager.ActiveDevice;
-        Debug.Log(Input.GetJoystickNames().Length);
-        if (Input.GetJoystickNames()[0] != "Wireless Controller")
-        {
-            isControllerConnected = false;
-        }
-        else
-        {
-            isControllerConnected = true;
-        }
+        /* Debug.Log(Input.GetJoystickNames().Length);
+         if (Input.GetJoystickNames()[0] != "Wireless Controller")
+         {
+             isControllerConnected = false;
+         }
+         else
+         {
+             isControllerConnected = true;
+         }*/
 
+        //rotates if player is holding LT, otherwise moves and rotates in direction of movement
         //rotation
-        if(Mathf.Abs(inDevice.RightStick.Vector.normalized.magnitude) > 0.05f)
-        {
-            dir.x = inDevice.RightStickX;
-            dir.z = inDevice.RightStickY;
-        }
-        else if (Mathf.Abs(inDevice.LeftStick.Vector.normalized.magnitude) > 0.05f)
+        if (Mathf.Abs(inDevice.LeftStick.Vector.normalized.magnitude) > 0.05f)
         {
             dir.x = inDevice.LeftStickX;
             dir.z = inDevice.LeftStickY;
         }
         dir.y = 0;
         playerBody.rotation = Quaternion.LookRotation(dir);
+        
+        if (inDevice.LeftTrigger.IsPressed)
+        {
+            //parrying with a precision shot
+            if (inDevice.Action3.IsPressed)
+            {
+                destination = Vector3.forward;
+                // StartCoroutine(MoveForward(transform.position, destination, 1));
+                StartCoroutine(ShowSmallHit());
+            }
+        }
+        else
+        {
+            //standard parry
+            if (inDevice.Action3.IsPressed)
+            {
+                destination = Vector3.forward;
+                // StartCoroutine(MoveForward(transform.position, destination, 1));
+                StartCoroutine(ShowBigHit());
+            }
 
-        //movement
-        player.Translate(playerSpeed * inDevice.LeftStickX, 0, playerSpeed * inDevice.LeftStickY);
+            //movement
+            player.Translate(playerSpeed * inDevice.LeftStickX, 0, playerSpeed * inDevice.LeftStickY);
+        }
+        
+
+        
 
         //adjust reload time
         bigTimer += Time.deltaTime;
@@ -79,26 +100,29 @@ public class PlayerController : MonoBehaviour {
             smallTimer = 0;
         }
 
-        //parrying
-        if (inDevice.RightTrigger.IsPressed && canBigHit)
-        {
-            destination = Vector3.forward;
-           // StartCoroutine(MoveForward(transform.position, destination, 1));
-            StartCoroutine(ShowBigHit());
-        }
+        
 
-        if (inDevice.RightBumper.IsPressed && canSmallHit)
-        {
-            destination = Vector3.forward;
-           // StartCoroutine(MoveForward(transform.position, destination, 1));
-            StartCoroutine(ShowSmallHit());
-        }
+        
 
         //restart game
         if (inDevice.MenuWasPressed)
         {
             SceneManager.LoadScene(0);
         }
+    }
+
+    public void HurtPlayer()
+    {
+        playerHealth--;
+        if(playerHealth < 1)
+        {
+            GameOver();
+        }
+    }
+
+    void GameOver()
+    {
+        Debug.Log("You died!");
     }
 
     IEnumerator ShowBigHit()

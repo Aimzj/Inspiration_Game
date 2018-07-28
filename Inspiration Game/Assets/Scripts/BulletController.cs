@@ -37,4 +37,16 @@ public class BulletController : MonoBehaviour {
             
         }
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            if (!isPlayerBullet)
+            {
+                playerScript.HurtPlayer();
+                Destroy(this.gameObject);
+            }   
+        }
+    }
 }
