@@ -35,35 +35,34 @@ public class BulletController : MonoBehaviour {
     {
         if (other.CompareTag("Hit") && !isPlayerBullet)
         {
+            Debug.Log("work!");
             if(playerScript.isBigParry)
             {
-                transform.up = Vector3.Reflect(transform.up, playerTrans.forward);
+                this.direction = Vector3.Reflect(this.direction, playerTrans.forward);
                 isPlayerBullet = true;
             }
             else if (playerScript.isSmallParry)
             {
-                transform.up = playerTrans.forward;
+                this.direction = playerTrans.forward;
                 isPlayerBullet = true;
             }
             
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("Player"))
+
+	void OnCollisionEnter(Collision hit)
+	{
+        if (hit.gameObject.CompareTag("Player"))
         {
             if (!isPlayerBullet)
             {
                 playerScript.HurtPlayer();
-                Destroy(this.gameObject);
-            }   
+                destroyBullet();
+            }
         }
-    }
 
-	void OnCollisionEnter(Collision hit)
-	{
-		if (hit.gameObject.tag != "Bullet") 
+        if (hit.gameObject.tag != "Bullet") 
 		{
 			destroyBullet ();
 		}

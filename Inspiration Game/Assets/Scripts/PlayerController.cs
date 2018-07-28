@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour {
 		lookTarget = GameObject.Find("LookTarget").GetComponent<Transform>();
 		bigHitMesh = GameObject.Find("BigHit").GetComponent<MeshRenderer>();
 		smallHitMesh = GameObject.Find("SmallHit").GetComponent<MeshRenderer>();
+        playerRB = GameObject.Find("PlayerBody").GetComponent<Rigidbody>();
 
 		canBigHit = false;
 		canSmallHit = false;
@@ -40,6 +41,9 @@ public class PlayerController : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+        //setting velocity to zero
+        playerRB.velocity = Vector3.zero;
+
 
         InputDevice inDevice = InputManager.ActiveDevice;
         /* Debug.Log(Input.GetJoystickNames().Length);
