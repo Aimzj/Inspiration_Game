@@ -183,7 +183,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 34cb6ea84b916334f9e2bca156b19fcd, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier:
   bulletSpeed: 0.15
   direction: {x: 0, y: 0, z: 1}
   lifeTime: 10
