@@ -10,7 +10,7 @@ public class EnemyMovement : MonoBehaviour {
 	{
 		Fodderbot, 
 		GoonBot, 
-		Minebot,
+		Shotbot,
 		Lazerbot,
 		All_Rounder
 	};
@@ -21,6 +21,7 @@ public class EnemyMovement : MonoBehaviour {
 	public int   health = 1;              // this represents how many hits the enemy can take before it dies
 	public float shootDelay = 1;          // this is how long the enemy stands still before shooting
 	public float recoilDelay = 0.2f;      // this is how long the enemy is idle after shooting
+	public float minTimeBetweenShots = 1; // this is the minimum amount of time between two separate shots from the same enemy
 	public float rotationSpeed = 0.2f;    // this is how quickly the enemy turns on it's y axis to face the player.
 	public float lineOfSightDist = 15f;   // How far ahead the enemy can see
 
@@ -41,6 +42,8 @@ public class EnemyMovement : MonoBehaviour {
 
 	public Transform directionFinder;  //transform dedicated to looking at the player, for slerping purposes
 
+	private float timeSiceLastShot = 0;
+
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindWithTag ("Player");
@@ -53,8 +56,14 @@ public class EnemyMovement : MonoBehaviour {
 
 		directionFinder.LookAt (player.transform, Vector3.up);   //always looks at the player
 
+		//here we count how long it's been since last we shot.
+		if (timeSiceLastShot <= minTimeBetweenShots)
+		{
+			timeSiceLastShot += Time.deltaTime;
+		}
+
 		//here we tell the fodderbots how to behave
-		if (enemyType == EnemyType.Fodderbot) 
+		if (enemyType == EnemyType.Fodderbot || enemyType == EnemyType.All_Rounder) 
 		{
 			agent.SetDestination (player.transform.position);    //this tells the enemy where to move to on the navmesh
 
@@ -95,13 +104,13 @@ public class EnemyMovement : MonoBehaviour {
 				//------------------------------------------------------------------
 				//if (!agent.pathPending)
 				//{
-					if (agent.remainingDistance <= agent.stoppingDistance && inLineOfSight)
+					if (/*agent.remainingDistance <= agent.stoppingDistance && */inLineOfSight)
 					{
-						if (!agent.hasPath || agent.velocity.sqrMagnitude <= 0.1f)
-						{
+						//if (!agent.hasPath || agent.velocity.sqrMagnitude <= 0.1f)
+						//{
 							isMoving = false;
 							//agent.isStopped = true;
-						}
+						//}
 					}
 					else
 					{
@@ -132,11 +141,12 @@ public class EnemyMovement : MonoBehaviour {
 				}
 
 				//start shoot animation here
-				if (isFiring == false) 
+				if (isFiring == false && timeSiceLastShot > minTimeBetweenShots) 
 				{
 					Invoke ("Fire", shootDelay);
 					isFiring = true;
 				}
+				
 			}
 		}
 
@@ -170,11 +180,10 @@ public class EnemyMovement : MonoBehaviour {
 
 	void Fire()
 	{
-		GameObject newBullet = Instantiate (bulletPref, transform.position + transform.forward*1.5f, bulletPref.transform.rotation);
-		if (enemyType != EnemyType.All_Rounder)
-		{
-			newBullet.GetComponent<BulletController> ().direction = gameObject.transform.forward;
-		}
+		timeSiceLastShot = 0;
+
+		GameObject newBullet = Instantiate (bulletPref, transform.position + transform.forward * 1.5f, transform.rotation);//new Quaternion(bulletPref.transform.rotation.x, 0, bulletPref.transform.rotation.z, 0));
+
 		Invoke ("continueMoving", recoilDelay);
 	}
 
