@@ -338,7 +338,7 @@ MonoBehaviour:
   shootDelay: 0.4
   recoilDelay: 0.2
   rotationSpeed: 0.12
-  lineOfSightDist: 15
+  lineOfSightDist: 22
   layerMask:
     serializedVersion: 2
     m_Bits: 4294966783
@@ -418,11 +418,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: -334000983
   m_Radius: 0.5
-  m_Speed: 5.5
+  m_Speed: 4.5
   m_Acceleration: 12
   avoidancePriority: 50
   m_AngularSpeed: 170
-  m_StoppingDistance: 12
+  m_StoppingDistance: 20
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
