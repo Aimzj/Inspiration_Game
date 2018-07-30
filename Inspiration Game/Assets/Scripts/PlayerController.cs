@@ -46,15 +46,15 @@ public class PlayerController : MonoBehaviour {
 
 
         InputDevice inDevice = InputManager.ActiveDevice;
-        /* Debug.Log(Input.GetJoystickNames().Length);
-         if (Input.GetJoystickNames()[0] != "Wireless Controller")
-         {
-             isControllerConnected = false;
-         }
-         else
-         {
-             isControllerConnected = true;
-         }*/
+        Debug.Log(Input.GetJoystickNames().Length);
+        if (InputManager.Devices.Count<=0)
+        {
+            isControllerConnected = false;
+        }
+        else
+        {
+            isControllerConnected = true;
+        }
 
         //rotates if player is holding LT, otherwise moves and rotates in direction of movement
         //rotation
@@ -64,7 +64,12 @@ public class PlayerController : MonoBehaviour {
             dir.z = inDevice.LeftStickY;
         }
         dir.y = 0;
-        playerBody.rotation = Quaternion.LookRotation(dir);
+
+        if (isControllerConnected)
+        {
+            playerBody.rotation = Quaternion.LookRotation(dir);
+        }
+      
         
         if (inDevice.LeftTrigger.IsPressed)
         {
@@ -174,7 +179,56 @@ public class PlayerController : MonoBehaviour {
     private void FixedUpdate()
     {
         // keyboard controls
+        if(!isControllerConnected)
+        {
+            //Get the Screen positions of the object
+            Vector2 positionOnScreen = Camera.main.WorldToViewportPoint(transform.position);
+
+            //Get the Screen position of the mouse
+            Vector2 mouseOnScreen = (Vector2)Camera.main.ScreenToViewportPoint(Input.mousePosition);
+
+            //Get the angle between the points
+            float angle = AngleBetweenTwoPoints(positionOnScreen, mouseOnScreen);
+
+            //Ta Daaa
+            playerBody.rotation = Quaternion.Euler(new Vector3(0f, 270-angle, 0f));
+            Debug.Log("Angle " + angle);
+
+            if (Input.GetMouseButton(1))
+            {
+                //parrying with a precision shot
+                if (Input.GetMouseButton(0))
+                {
+                    destination = Vector3.forward;
+                    // StartCoroutine(MoveForward(transform.position, destination, 1));
+                    StartCoroutine(ShowSmallHit());
+                }
+            }
+            else
+            {
+                //standard parry
+                if (Input.GetMouseButton(0))
+                {
+                    destination = Vector3.forward;
+                    // StartCoroutine(MoveForward(transform.position, destination, 1));
+                    StartCoroutine(ShowBigHit());
+                }
+
+                //movement
+                player.Translate(playerSpeed * Input.GetAxis("Horizontal"), 0, playerSpeed * Input.GetAxis("Vertical"));
+            }
+            
+
+        }
+
+
+
+           
         
+    }
+    float AngleBetweenTwoPoints(Vector3 a, Vector3 b)
+    {
+        return Mathf.Atan2(a.y - b.y, a.x - b.x) * Mathf.Rad2Deg;
     }
 
 }
