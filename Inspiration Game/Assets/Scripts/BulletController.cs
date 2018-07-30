@@ -40,7 +40,6 @@ public class BulletController : MonoBehaviour {
 		{
 			Debug.DrawRay (transform.position, transform.up * rayHit.distance, Color.magenta);
 			lazerLength = rayHit.distance;
-			print (lazerLength);
 			lazerFinalScale = new Vector3 (transform.localScale.x, transform.localScale.y + (lazerLength/2), transform.localScale.z);
 		}
 		// --------------------------------------------------------------------------------------------
@@ -112,26 +111,33 @@ public class BulletController : MonoBehaviour {
     }
 
 
-	void OnCollisionEnter(Collision hit)
+	void OnTriggerEnter(Collider hit)
 	{
         
-		if (hit.gameObject.CompareTag("Player"))
-        {
-            if (!isPlayerBullet)
-            {
-                playerScript.HurtPlayer();
+		if (hit.gameObject.CompareTag ("Player")) {
+			if (!isPlayerBullet) 
+			{
+				playerScript.HurtPlayer ();
 				//we don't want to destroy the lazer on contact
-				if (bulletType == BulletType.Projectile) 
-				{
+				if (bulletType == BulletType.Projectile) {
 					destroyBullet ();
 				}
-            }
-        }
-
-		//we don't want to destroy the lazer on contact
-		if (hit.gameObject.tag != "Bullet" && bulletType == BulletType.Projectile) 
+			}
+		} 
+		else if (hit.gameObject.CompareTag ("Enemy")) 
 		{
-			destroyBullet ();
+			if (isPlayerBullet) 
+			{
+				hit.gameObject.GetComponent<EnemyMovement> ().HurtEnemy ();
+				destroyBullet ();
+			}
+		} 
+		else 
+		{
+			//we don't want to destroy the lazer on contact, and we don't want bullets to destroy eachother
+			if (hit.gameObject.tag != "Bullet" && bulletType == BulletType.Projectile) {
+				destroyBullet ();
+			}
 		}
 
 	}
