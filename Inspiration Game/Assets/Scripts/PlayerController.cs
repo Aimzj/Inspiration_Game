@@ -194,7 +194,7 @@ public class PlayerController : MonoBehaviour {
             playerBody.rotation = Quaternion.Euler(new Vector3(0f, 270-angle, 0f));
             Debug.Log("Angle " + angle);
 
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetMouseButton(1))
             {
                 //parrying with a precision shot
                 if (Input.GetMouseButton(0))

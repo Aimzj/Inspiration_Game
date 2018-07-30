@@ -90,24 +90,49 @@ public class SceneManagementScript : MonoBehaviour {
         }
     }
 
-    public void LoadTutorial ()
+    public void LoadTutorial1()
     {
         SceneManager.LoadScene(1);
     }
 
-    public void LoadLevel1()
+    public void LoadTutorial2()
     {
         SceneManager.LoadScene(2);
     }
 
-    public void LoadLevel2()
+    public void LoadLevel1()
     {
         SceneManager.LoadScene(3);
     }
 
-    public void LoadLevel3()
+    public void LoadLevel2()
     {
         SceneManager.LoadScene(4);
+    }
+
+    public void LoadLevel3()
+    {
+        SceneManager.LoadScene(5);
+    }
+
+    public void LoadNextLevel()
+    {
+        if (SceneManager.GetActiveScene().buildIndex>2)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+        }
+    }
+
+    public void NextLevelTransition()
+    {
+        FadeOut();
+        canvas.ForeignInvoke("StartScreenOff", 0.5f);
+        canvas.ForeignInvoke("GameScreenOff", 0.5f);
+
+        Invoke("LoadNextLevel", 0.7f);
+
+        Invoke("FadeIn", 0.75f);
+        canvas.ForeignInvoke("GameScreenOn", 1f);
     }
 
     public void QuitGame()
