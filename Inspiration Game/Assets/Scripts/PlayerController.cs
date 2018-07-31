@@ -21,6 +21,10 @@ public class PlayerController : MonoBehaviour {
     private TrailRenderer swishTrail;
     private Quaternion playerSwishRotation;
 
+    AudioSource myAudSource;
+    AudioClip audDeath, audMove, audAttackWide, audAttackPrecise;
+    audioLibrary audioLib;
+
 
 	// Use this for initialization
 	void Start () {
@@ -36,6 +40,8 @@ public class PlayerController : MonoBehaviour {
         playerSwishPos = playerBody.transform.position;
 
         swishTrail.enabled = false;
+
+        audioLib = GameObject.Find("audioLibrary").GetComponent<audioLibrary>();
 
 		canBigHit = false;
 		canSmallHit = false;
@@ -152,12 +158,6 @@ public class PlayerController : MonoBehaviour {
             smallTimer = 0;
         }
 
-        
-        //restart game
-        if (inDevice.MenuWasPressed)
-        {
-            SceneManager.LoadScene(0);
-        }
     }
 
     public void HurtPlayer()
@@ -165,6 +165,8 @@ public class PlayerController : MonoBehaviour {
         playerHealth--;
         if(playerHealth < 1)
         {
+            
+            myAudSource.PlayOneShot(audioLib.playerDeath);
             GameOver();
         }
     }
@@ -237,6 +239,7 @@ public class PlayerController : MonoBehaviour {
         smallHitMesh.enabled = false;
     }
 
+
     private void FixedUpdate()
     {
         // keyboard controls
@@ -255,13 +258,18 @@ public class PlayerController : MonoBehaviour {
             playerBody.rotation = Quaternion.Euler(new Vector3(0f, 270-angle, 0f));
            // Debug.Log("Angle " + angle);
 
-            if (Input.GetKey(KeyCode.LeftShift))
+            if (Input.GetMouseButton(1))
             {
                 //parrying with a precision shot
                 if (Input.GetMouseButton(0))
                 {
+
                     if(canSmallHit)
+                    {
                         StartCoroutine(ShowSmallHit());
+                        myAudSource.PlayOneShot(audioLib.playerAttackPrecise);
+                    }
+
                 }
             }
             else
@@ -269,8 +277,12 @@ public class PlayerController : MonoBehaviour {
                 //standard parry
                 if (Input.GetMouseButton(0))
                 {
-                    if(canBigHit)
+                    if (canBigHit)
+                    {
                         StartCoroutine(ShowBigHit());
+                        myAudSource.PlayOneShot(audioLib.playerAttackWide);
+                    }
+
                 }
 
                 //movement
