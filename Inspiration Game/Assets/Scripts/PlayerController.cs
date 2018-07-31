@@ -18,6 +18,10 @@ public class PlayerController : MonoBehaviour {
     private Rigidbody playerRB;
     private Vector3 destination;
 
+    AudioSource myAudSource;
+    AudioClip audDeath, audMove, audAttackWide, audAttackPrecise;
+    audioLibrary audioLib;
+
 
 	// Use this for initialization
 	void Start () {
@@ -27,6 +31,8 @@ public class PlayerController : MonoBehaviour {
 		bigHitMesh = GameObject.Find("BigHit").GetComponent<MeshRenderer>();
 		smallHitMesh = GameObject.Find("SmallHit").GetComponent<MeshRenderer>();
         playerRB = GameObject.Find("PlayerBody").GetComponent<Rigidbody>();
+
+        audioLib = GameObject.Find("audioLibrary").GetComponent<audioLibrary>();
 
 		canBigHit = false;
 		canSmallHit = false;
@@ -113,15 +119,16 @@ public class PlayerController : MonoBehaviour {
             smallTimer = 0;
         }
 
-        
 
-        
+
+
 
         //restart game
-        if (inDevice.MenuWasPressed)
+        /*if (inDevice.MenuWasPressed)
         {
+            //already in the game manager
             SceneManager.LoadScene(0);
-        }
+        }*/
     }
 
     public void HurtPlayer()
@@ -129,6 +136,8 @@ public class PlayerController : MonoBehaviour {
         playerHealth--;
         if(playerHealth < 1)
         {
+            
+            myAudSource.PlayOneShot(audioLib.playerDeath);
             GameOver();
         }
     }
@@ -164,6 +173,7 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator MoveForward( Vector3 origin, Vector3 target, float duration)
     {
+
         float journey = 0f;
         while (journey <= duration)
         {
@@ -171,7 +181,7 @@ public class PlayerController : MonoBehaviour {
             float percent = Mathf.Clamp01(journey / duration);
 
             transform.localPosition = Vector3.Lerp(origin, target, percent);
-
+            myAudSource.PlayOneShot(audioLib.playerMove);
             yield return null;
         }
     }
@@ -202,6 +212,8 @@ public class PlayerController : MonoBehaviour {
                     destination = Vector3.forward;
                     // StartCoroutine(MoveForward(transform.position, destination, 1));
                     StartCoroutine(ShowSmallHit());
+
+                    myAudSource.PlayOneShot(audioLib.playerAttackPrecise);
                 }
             }
             else
@@ -212,6 +224,7 @@ public class PlayerController : MonoBehaviour {
                     destination = Vector3.forward;
                     // StartCoroutine(MoveForward(transform.position, destination, 1));
                     StartCoroutine(ShowBigHit());
+                    myAudSource.PlayOneShot(audioLib.playerAttackWide);
                 }
 
                 //movement
