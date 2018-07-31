@@ -26,7 +26,8 @@ public class EnemyMovement : MonoBehaviour {
 	public float rotationSpeed = 0.2f;    // this is how quickly the enemy turns on it's y axis to face the player.
 	public float lineOfSightDist = 15f;   // How far ahead the enemy can see
 	public int numPatrolPoints = 3;       // this is specifically for the Lazerbot. It represents how many randomized patrol points it has.
-	public float distBetweenPatrolPoints = 15;
+	public float distBetweenPatrolPoints = 15;  //approximate distance between each of the lazerbot's patrol points
+	public LineRenderer aimLine;          //aimer for lazer
 
 	public LayerMask layerMask;
 
@@ -48,9 +49,10 @@ public class EnemyMovement : MonoBehaviour {
 
 	private float timeSiceLastShot = 0;
 	private Vector3 nextPoint;            //specifically for pumpKing. Stores it's next position to move to.
-	private List<Vector3> patrolPoints = new List<Vector3>();   //specifically for LazerBot 626. These are the points it will patrol between
+	private Vector3[] patrolPoints;   //specifically for LazerBot 626. These are the points it will patrol between
 	private int currentPatrolPoint = 0;   //tracks which point the lazerbot is heading to
 	private Quaternion lazerDirection;    //where the lazer last decided to fire
+	private Vector3 finalLazerPoint;      //point where lazer will hit
 	 
 	// Use this for initialization
 	void Start () {
@@ -59,14 +61,16 @@ public class EnemyMovement : MonoBehaviour {
 		agent.SetDestination (player.transform.position); //this tells the enemy where to move to on the navmesh
 		if (enemyType == EnemyType.Lazerbot)
 		{
+			patrolPoints = new Vector3[numPatrolPoints];
 			for (int i = 0; i < numPatrolPoints; i++)
 			{
+				patrolPoints [i] = new Vector3 (555,555,555);
 				//patrolPoints.Add (new Vector3 (Random.Range(-5,5), 0, Random.Range(-5,5)));
 				NavMeshHit meshHit;
-				patrolPoints.Add (new Vector3(555,555,555));     //way too far out to be on the navmesh
+				//patrolPoints.Add (new Vector3(555,555,555));     //way too far out to be on the navmesh
 				while (!NavMesh.SamplePosition(patrolPoints[i], out meshHit, 5f, NavMesh.AllAreas))
 				{
-					if (patrolPoints.Count == 1) 
+					if (i == 0) 
 					{
 						patrolPoints[i] = (transform.position + (Random.onUnitSphere * distBetweenPatrolPoints));
 						patrolPoints [i] = new Vector3 (patrolPoints [i].x, 0, patrolPoints [i].z);                 //this removes the y component of our random vector
@@ -238,32 +242,41 @@ public class EnemyMovement : MonoBehaviour {
 			//Raycasting to see if the bot is looking at the player
 			//----------------------------------------------------------
 			RaycastHit rayHit;
-			directionFinder.LookAt (player.transform);
-			if (Physics.Raycast(transform.position, directionFinder.forward, out rayHit, lineOfSightDist, layerMask) && timeSiceLastShot > minTimeBetweenShots)
-			{
-				Debug.DrawRay (transform.position, directionFinder.forward * rayHit.distance, Color.magenta);
-				if (rayHit.collider.gameObject.tag == "Player" || rayHit.collider.gameObject.tag == "Hit")
-				{
-					inLineOfSight = true;
-					if (inLineOfSight == false) {
-						lazerDirection = directionFinder.transform.rotation;
+			if (!inLineOfSight) {
+				//directionFinder.LookAt (player.transform); 
+				if (Physics.Raycast(transform.position, player.transform.position-transform.position, out rayHit, lineOfSightDist, layerMask) && timeSiceLastShot > minTimeBetweenShots) {
+					Debug.DrawRay (transform.position, (player.transform.position-transform.position) * rayHit.distance, Color.magenta);
+					if (rayHit.collider.gameObject.tag == "Player" || rayHit.collider.gameObject.tag == "Hit") {
+						inLineOfSight = true;
+						directionFinder.LookAt (player.transform);
+						lazerDirection = directionFinder.rotation;
+						finalLazerPoint = rayHit.point;
+						//playerDirectionChosen = true;
+						//if (inLineOfSight == false) {
+						//	lazerDirection = directionFinder.transform.rotation;
+						//}
 					}
 				}
 			}
 			//----------------------------------------------------------
 
-
-			if (isMoving)    // direct the enemy to its new position when it isn't shooting
+			if (inLineOfSight)
 			{
-				if (inLineOfSight)  //if enemy is looking at the player and player is in range
+				agent.SetDestination (transform.position);
+				transform.rotation = Quaternion.Slerp (transform.rotation, lazerDirection, rotationSpeed);
+
+				print ("Angle: " + Quaternion.Angle(transform.rotation, lazerDirection));
+				if (isFiring == false && timeSiceLastShot > minTimeBetweenShots) 
 				{
-					isMoving = false;
-				}
-				else
-				{
-					agent.SetDestination (patrolPoints[currentPatrolPoint]);
+					Invoke ("showAimer", 0.75f);
+					Invoke ("Fire", shootDelay);
+					isFiring = true;
 				}
 
+			}
+			else
+			{
+				agent.SetDestination (patrolPoints[currentPatrolPoint]);
 				directionFinder.LookAt (patrolPoints [currentPatrolPoint]);
 
 				if (rotateWithCode) {
@@ -271,41 +284,35 @@ public class EnemyMovement : MonoBehaviour {
 					transform.rotation = Quaternion.Slerp (transform.rotation, directionFinder.rotation, rotationSpeed);
 				}
 
-				if (agent.remainingDistance <= agent.stoppingDistance+0.5f)
+				//the following if statements check if a navmesh agent has reached it's destination
+				//it's a tad lengthy, but an accurate way of determining this.
+				//------------------------------------------------------------------
+				if (!agent.pathPending)
 				{
-					currentPatrolPoint = ((currentPatrolPoint + 1) % numPatrolPoints);
-					agent.SetDestination (patrolPoints[currentPatrolPoint]);
-					print ("current patrol: " + currentPatrolPoint);
+					if (agent.remainingDistance <= agent.stoppingDistance)
+					{
+						if (!agent.hasPath || agent.velocity.sqrMagnitude <= 0.1f)
+						{
+							currentPatrolPoint = ((currentPatrolPoint + 1) % numPatrolPoints);
+							agent.SetDestination (patrolPoints[currentPatrolPoint]);
+							//print ("current patrol: " + currentPatrolPoint);
+						}
+					}
 				}
-
 			}
-			else             // tell the enemy to shoot
-			{
-				agent.SetDestination (transform.position);
-				directionFinder.LookAt (player.transform);
-
-				//rotate enemy to face the player
-				if (rotateWhileStill)
-				{
-					//we slerp the enemy rotation towards the directionFinder, which points at the player
-					transform.rotation = Quaternion.Slerp (transform.rotation, directionFinder.rotation, rotationSpeed);
-				}
-
-				//start shoot animation here
-				if (isFiring == false && timeSiceLastShot > minTimeBetweenShots) 
-				{
-					Invoke ("Fire", shootDelay);
-					isFiring = true;
-				}
-
-			}
+				
 		}
 			
 		
 	}
 		
 
-    public void HurtEnemy()
+	void showAimer()
+	{
+		aimLine.SetPositions (new Vector3[]{bulletSpawnPoint.position,finalLazerPoint});
+	}
+
+	public void HurtEnemy()
     {
         this.health--;
 
@@ -351,35 +358,30 @@ public class EnemyMovement : MonoBehaviour {
 
 	void continueMoving()
 	{
-		if (enemyType != EnemyType.All_Rounder) {
+		if (enemyType != EnemyType.All_Rounder && enemyType != EnemyType.Lazerbot) {
 			agent.SetDestination (player.transform.position);
 		}
 		else
 		{
-			//somewhere 15 units away from the player
-			choosePoint(true);
+			if (enemyType == EnemyType.All_Rounder)
+			{			
+				//somewhere 15 units away from the player
+				choosePoint(true);
+			}
 		}
 		isMoving = true;
 		isFiring = false;
 		if (enemyType == EnemyType.Lazerbot)
 		{
+			//inLineOfSight = false;
+			//playerDirectionChosen = false;
 			inLineOfSight = false;
+			aimLine.SetPositions (new Vector3[]{new Vector3(0,0,0),new Vector3(0,0,0)}); 
 		}
 		//agent.isStopped = false;
 	}
 
-    /*private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Bullet"))
-        {
-            BulletController bulletScript = collision.gameObject.GetComponent<BulletController>();
-            if (bulletScript.isPlayerBullet)
-            {
-                Destroy(collision.gameObject);
-                HurtEnemy();
-            }
-        }
-    }*/
+    
 }
 
 //tomorrow, after each shot randomise the enemy's position a little.

@@ -33,16 +33,19 @@ public class BulletController : MonoBehaviour {
         isPlayerBullet = false;
 		bulletSpeed = bulletSpeed*30; // accounts for the time.deltatime adjustments
 
-		//the lazer checks what it will collide with and then lerps towards that point
-		//lazer Raycasting ----------------------------------------------------------------------------
-		RaycastHit rayHit;
-		if (Physics.Raycast(transform.position, transform.up, out rayHit, Mathf.Infinity, lazerMask))
+		if (bulletType == BulletType.Lazer)
 		{
-			Debug.DrawRay (transform.position, transform.up * rayHit.distance, Color.magenta);
-			lazerLength = rayHit.distance;
-			lazerFinalScale = new Vector3 (transform.localScale.x, transform.localScale.y + (lazerLength/2), transform.localScale.z);
+			//the lazer checks what it will collide with and then lerps towards that point
+			//lazer Raycasting ----------------------------------------------------------------------------
+			RaycastHit rayHit;
+			if (Physics.Raycast(transform.position, transform.up, out rayHit, Mathf.Infinity, lazerMask))
+			{
+				Debug.DrawRay (transform.position, transform.up * rayHit.distance, Color.magenta);
+				lazerLength = rayHit.distance;
+				lazerFinalScale = new Vector3 (transform.localScale.x, transform.localScale.y + (lazerLength/2), transform.localScale.z);
+			}
+			// --------------------------------------------------------------------------------------------
 		}
-		// --------------------------------------------------------------------------------------------
 	}
 
 	// Update is called once per frame

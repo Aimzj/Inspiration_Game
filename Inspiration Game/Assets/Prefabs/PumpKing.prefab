@@ -394,9 +394,11 @@ MonoBehaviour:
   bulletSpawnPoint: {fileID: 4979147361142146}
   rotationSpeed: 0.3
   lineOfSightDist: 15
+  numPatrolPoints: 3
+  distBetweenPatrolPoints: 15
   layerMask:
     serializedVersion: 2
-    m_Bits: 4294966783
+    m_Bits: 4294963711
   rotateWithCode: 1
   rotateWhileStill: 1
   isMoving: 1

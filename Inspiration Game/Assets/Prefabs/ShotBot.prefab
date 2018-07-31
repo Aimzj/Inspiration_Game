@@ -418,7 +418,7 @@ MonoBehaviour:
   distBetweenPatrolPoints: 0
   layerMask:
     serializedVersion: 2
-    m_Bits: 4294965759
+    m_Bits: 4294963711
   rotateWithCode: 1
   rotateWhileStill: 1
   isMoving: 1
