@@ -41,11 +41,14 @@ public class EnemyMovement : MonoBehaviour {
 
 	public Transform directionFinder;  //transform dedicated to looking at the player, for slerping purposes
 
+    private PlayerController playerScript;
+
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindWithTag ("Player");
 		agent = gameObject.GetComponent<NavMeshAgent> (); 
 		agent.SetDestination (player.transform.position); //this tells the enemy where to move to on the navmesh
+        playerScript = GameObject.Find("PlayerBody").GetComponent<PlayerController>();
 	} 
 	
 	// Update is called once per frame
@@ -196,6 +199,13 @@ public class EnemyMovement : MonoBehaviour {
                 Destroy(collision.gameObject);
                 HurtEnemy();
             }
+        }
+    }
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.name == "BigHit" && playerScript.isBigParry)
+        {
+            HurtEnemy();
         }
     }
 }

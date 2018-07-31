@@ -8,15 +8,18 @@ public class PlayerController : MonoBehaviour {
 
     public float playerSpeed, rotationSpeed, bigReload, smallReload, bigHitDuration, smallHitDuration;
     public bool isBigParry, isSmallParry, isControllerConnected;
-    public float playerHealth;
+    public float playerHealth, swishSpeed, maxSwishTime;
 
     private Vector3 dir;
-    private Transform player, playerBody, lookTarget;
+    private Transform player, playerBody, lookTarget, swishPivot;
     private MeshRenderer bigHitMesh, smallHitMesh;
-    private bool canBigHit, canSmallHit;
-    private float bigTimer, smallTimer;
+    private bool canBigHit, canSmallHit, performSwish, swishRight;
+    private float bigTimer, smallTimer, currSwishTime;
     private Rigidbody playerRB;
-    private Vector3 destination;
+    private Vector3 playerSwishPos;
+    private GameObject SwishObj;
+    private TrailRenderer swishTrail;
+    private Quaternion playerSwishRotation;
 
 
 	// Use this for initialization
@@ -27,20 +30,58 @@ public class PlayerController : MonoBehaviour {
 		bigHitMesh = GameObject.Find("BigHit").GetComponent<MeshRenderer>();
 		smallHitMesh = GameObject.Find("SmallHit").GetComponent<MeshRenderer>();
         playerRB = GameObject.Find("PlayerBody").GetComponent<Rigidbody>();
+        SwishObj = GameObject.Find("Swish");
+        swishTrail = GameObject.Find("Swish").GetComponent<TrailRenderer>();
+        swishPivot = GameObject.Find("SwishPivot").GetComponent<Transform>();
+        playerSwishPos = playerBody.transform.position;
+
+        swishTrail.enabled = false;
 
 		canBigHit = false;
 		canSmallHit = false;
+
+        performSwish = false;
+        swishRight = true;
 
 		bigTimer = 0;
 		smallTimer = 0;
 
 		isControllerConnected = false;
 
-		destination = Vector3.zero;
 	}
 
 	// Update is called once per frame
 	void Update () {
+
+        //swish animation!
+        if (performSwish)
+        {
+            currSwishTime += Time.deltaTime;
+            //if time for swishing is over, swishing stops and is reset
+            if (currSwishTime > maxSwishTime)
+            {
+                performSwish = false;
+                swishTrail.enabled = false;
+                swishRight = !swishRight;
+                
+            }
+            else
+            {
+                if (swishRight)
+                {
+                    //SwishObj.transform.RotateAround(playerSwishPos, playerBody.up, swishSpeed * Time.deltaTime);
+                    swishPivot.Rotate(Vector3.up, swishSpeed * Time.deltaTime);
+                   // swishPivot.rotation = Quaternion.Slerp(new Quaternion(0, playerSwishRotation.y,0, playerSwishRotation.w), new Quaternion(0, playerSwishRotation.y+180, 0, playerSwishRotation.w), swishSpeed*Time.deltaTime);
+                }
+                else
+                {
+                    swishPivot.Rotate(Vector3.up, -swishSpeed * Time.deltaTime);
+                    //swishPivot.rotation = Quaternion.Slerp(new Quaternion(0, playerSwishRotation.y, 0, playerSwishRotation.w), new Quaternion(0, playerSwishRotation.y + 180, 0, playerSwishRotation.w), -swishSpeed * Time.deltaTime);
+                }
+            }
+
+        }
+        
         //setting velocity to zero
         playerRB.velocity = Vector3.zero;
 
@@ -76,9 +117,8 @@ public class PlayerController : MonoBehaviour {
             //parrying with a precision shot
             if (inDevice.Action3.IsPressed)
             {
-                destination = Vector3.forward;
-                // StartCoroutine(MoveForward(transform.position, destination, 1));
-                StartCoroutine(ShowSmallHit());
+                if(canSmallHit)
+                    StartCoroutine(ShowSmallHit());
             }
         }
         else
@@ -86,13 +126,12 @@ public class PlayerController : MonoBehaviour {
             //standard parry
             if (inDevice.Action3.IsPressed)
             {
-                destination = Vector3.forward;
-                // StartCoroutine(MoveForward(transform.position, destination, 1));
-                StartCoroutine(ShowBigHit());
+                if(canBigHit)
+                    StartCoroutine(ShowBigHit());
             }
 
             //movement
-            player.Translate(playerSpeed * inDevice.LeftStickX, 0, playerSpeed * inDevice.LeftStickY);
+            player.Translate(playerSpeed * inDevice.LeftStickX, 0, playerSpeed * inDevice.LeftStickY *Time.deltaTime);
         }
         
 
@@ -114,9 +153,6 @@ public class PlayerController : MonoBehaviour {
         }
 
         
-
-        
-
         //restart game
         if (inDevice.MenuWasPressed)
         {
@@ -140,8 +176,29 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator ShowBigHit()
     {
+       
+        currSwishTime = 0;
+        swishTrail.enabled = true;
+        swishPivot.position = playerBody.position;
+        //set the rotation of the swish pivot
+        if (swishRight)
+            swishPivot.rotation = playerBody.rotation;
+        else
+        {
+            swishPivot.rotation = Quaternion.Euler(playerBody.eulerAngles.x, playerBody.eulerAngles.y + 180, playerBody.eulerAngles.z);
+        }
+        /*if (swishRight)
+        {
+            SwishObj.transform.localPosition = new Vector3(playerBody.position.x - 2f, playerBody.position.y, playerBody.position.z);
+        }
+        else
+        {
+            SwishObj.transform.localPosition = new Vector3(playerBody.position.x + 2f, playerBody.position.y, playerBody.position.z);
+        }*/
+        // playerSwishRotation = playerBody.rotation;
+        performSwish = true;
         canBigHit = false;
-        bigHitMesh.enabled = true;
+       // bigHitMesh.enabled = true;
         isBigParry = true;
         yield return new WaitForSecondsRealtime(bigHitDuration);
         isBigParry = false;
@@ -150,30 +207,34 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator ShowSmallHit()
     {
+        
+        currSwishTime = 0;
+        swishTrail.enabled = true;
+        swishPivot.position = playerBody.position;
+        //set the rotation of the swish pivot
+        if (swishRight)
+            swishPivot.rotation = playerBody.rotation;
+        else
+        {
+            swishPivot.rotation = Quaternion.Euler(playerBody.eulerAngles.x, playerBody.eulerAngles.y+180, playerBody.eulerAngles.z);
+        }
+        /* if (swishRight)
+         {
+             SwishObj.transform.position = new Vector3(playerBody.position.x - 2f, playerBody.position.y, playerBody.position.z);
+         }
+         else
+         {
+             SwishObj.transform.position = new Vector3(playerBody.position.x + 2f, playerBody.position.y, playerBody.position.z);
+         }*/
+        //playerSwishPos = playerBody.transform.position;
+        // playerSwishRotation = playerBody.rotation;
+        performSwish = true;
         canSmallHit = false;
-        smallHitMesh.enabled = true;
+       // smallHitMesh.enabled = true;
         isSmallParry = true;
         yield return new WaitForSecondsRealtime(smallHitDuration);
         isSmallParry = false;
         smallHitMesh.enabled = false;
-    }
-
-
-    //Lerping code adapted from:
-    //https://hackernoon.com/lerping-with-coroutines-and-animation-curves-4185b30f6002
-
-    IEnumerator MoveForward( Vector3 origin, Vector3 target, float duration)
-    {
-        float journey = 0f;
-        while (journey <= duration)
-        {
-            journey = journey + Time.deltaTime;
-            float percent = Mathf.Clamp01(journey / duration);
-
-            transform.localPosition = Vector3.Lerp(origin, target, percent);
-
-            yield return null;
-        }
     }
 
     private void FixedUpdate()
@@ -192,16 +253,15 @@ public class PlayerController : MonoBehaviour {
 
             //Ta Daaa
             playerBody.rotation = Quaternion.Euler(new Vector3(0f, 270-angle, 0f));
-            Debug.Log("Angle " + angle);
+           // Debug.Log("Angle " + angle);
 
             if (Input.GetKey(KeyCode.LeftShift))
             {
                 //parrying with a precision shot
                 if (Input.GetMouseButton(0))
                 {
-                    destination = Vector3.forward;
-                    // StartCoroutine(MoveForward(transform.position, destination, 1));
-                    StartCoroutine(ShowSmallHit());
+                    if(canSmallHit)
+                        StartCoroutine(ShowSmallHit());
                 }
             }
             else
@@ -209,9 +269,8 @@ public class PlayerController : MonoBehaviour {
                 //standard parry
                 if (Input.GetMouseButton(0))
                 {
-                    destination = Vector3.forward;
-                    // StartCoroutine(MoveForward(transform.position, destination, 1));
-                    StartCoroutine(ShowBigHit());
+                    if(canBigHit)
+                        StartCoroutine(ShowBigHit());
                 }
 
                 //movement
