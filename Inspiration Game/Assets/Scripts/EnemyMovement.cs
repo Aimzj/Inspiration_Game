@@ -46,7 +46,6 @@ public class EnemyMovement : MonoBehaviour {
 
 	public Transform directionFinder;     //transform dedicated to looking at the player, for slerping purposes
 
-
 	private float timeSiceLastShot = 0;
 	private Vector3 nextPoint;            //specifically for pumpKing. Stores it's next position to move to.
 	private Vector3[] patrolPoints;   //specifically for LazerBot 626. These are the points it will patrol between
@@ -54,11 +53,14 @@ public class EnemyMovement : MonoBehaviour {
 	private Quaternion lazerDirection;    //where the lazer last decided to fire
 	private Vector3 finalLazerPoint;      //point where lazer will hit
 	 
+    private PlayerController playerScript;
+
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindWithTag ("Player");
 		agent = gameObject.GetComponent<NavMeshAgent> (); 
 		agent.SetDestination (player.transform.position); //this tells the enemy where to move to on the navmesh
+
 		if (enemyType == EnemyType.Lazerbot)
 		{
 			patrolPoints = new Vector3[numPatrolPoints];
@@ -84,7 +86,8 @@ public class EnemyMovement : MonoBehaviour {
 				print (patrolPoints[i]);
 			}
 		}
-
+			
+        playerScript = GameObject.Find("PlayerBody").GetComponent<PlayerController>();
 	} 
 	
 	// Update is called once per frame
@@ -382,6 +385,12 @@ public class EnemyMovement : MonoBehaviour {
 	}
 
     
-}
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.name == "BigHit" && playerScript.isBigParry)
+        {
+            HurtEnemy();
+        }
+    }
 
-//tomorrow, after each shot randomise the enemy's position a little.
+}

@@ -48,13 +48,13 @@ public class SceneManagementScript : MonoBehaviour {
             
             canvas.ForeignInvoke("StartScreenOff", 0.5f);
 
-            Invoke("LoadTutorial",0.7f);
+            Invoke("LoadTutorial1",0.7f);
 
             Invoke("FadeIn", 0.75f);
             canvas.ForeignInvoke("GameScreenOn",1f);
            
         }
-        else if (inDevice.Action1.IsPressed && SceneManager.GetActiveScene().buildIndex == 0)//LOAD LEVEL 1
+        else if ((inDevice.Action1.IsPressed || Input.GetKeyDown(KeyCode.Alpha1)) && SceneManager.GetActiveScene().buildIndex == 0)//LOAD LEVEL 1
         {
             FadeOut();
             canvas.ForeignInvoke("StartScreenOff", 0.5f);
@@ -71,8 +71,38 @@ public class SceneManagementScript : MonoBehaviour {
 
             Invoke("QuitGame", 0.6f);
         }
+        else if (inDevice.MenuWasPressed && SceneManager.GetActiveScene().buildIndex > 0)//LEAVE TO START SCREEN
+        {
+            FadeOut();
+            canvas.ForeignInvoke("GameScreenOff", 0.5f);
 
-        
+            Invoke("LoadStart", 0.7f);
+
+            Invoke("FadeIn", 0.75f);
+            canvas.ForeignInvoke("StartScreenOn", 1f);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2) && SceneManager.GetActiveScene().buildIndex == 0)//QUIT GAME
+        {
+            FadeOut();
+            canvas.ForeignInvoke("StartScreenOff", 0.5f);
+
+            Invoke("LoadLevel2", 0.7f);
+
+            Invoke("FadeIn", 0.75f);
+            canvas.ForeignInvoke("GameScreenOn", 1f);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3) && SceneManager.GetActiveScene().buildIndex == 0)//QUIT GAME
+        {
+            FadeOut();
+            canvas.ForeignInvoke("StartScreenOff", 0.5f);
+
+            Invoke("LoadLevel3", 0.7f);
+
+            Invoke("FadeIn", 0.75f);
+            canvas.ForeignInvoke("GameScreenOn", 1f);
+        }
+
+
         if (enableFade &&  (fadeScreen != null))
         {
             Timer(ref screenFadeTimer,screenFadeTimerLim);
@@ -90,24 +120,56 @@ public class SceneManagementScript : MonoBehaviour {
         }
     }
 
-    public void LoadTutorial ()
+
+
+    public void LoadStart()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void LoadTutorial1()
     {
         SceneManager.LoadScene(1);
     }
 
-    public void LoadLevel1()
+    public void LoadTutorial2()
     {
         SceneManager.LoadScene(2);
     }
 
-    public void LoadLevel2()
+    public void LoadLevel1()
     {
         SceneManager.LoadScene(3);
     }
 
-    public void LoadLevel3()
+    public void LoadLevel2()
     {
         SceneManager.LoadScene(4);
+    }
+
+    public void LoadLevel3()
+    {
+        SceneManager.LoadScene(5);
+    }
+
+    public void LoadNextLevel()
+    {
+        if (SceneManager.GetActiveScene().buildIndex>2)
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
+        }
+    }
+
+    public void NextLevelTransition()
+    {
+        FadeOut();
+        canvas.ForeignInvoke("StartScreenOff", 0.5f);
+        canvas.ForeignInvoke("GameScreenOff", 0.5f);
+
+        Invoke("LoadNextLevel", 0.7f);
+
+        Invoke("FadeIn", 0.75f);
+        canvas.ForeignInvoke("GameScreenOn", 1f);
     }
 
     public void QuitGame()

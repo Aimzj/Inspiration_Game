@@ -351,6 +351,48 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 72359512}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &93641000
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4828908925242560, guid: 431f42c44a7ca044699739e7cd3926df, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4828908925242560, guid: 431f42c44a7ca044699739e7cd3926df, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4828908925242560, guid: 431f42c44a7ca044699739e7cd3926df, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4828908925242560, guid: 431f42c44a7ca044699739e7cd3926df, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4828908925242560, guid: 431f42c44a7ca044699739e7cd3926df, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4828908925242560, guid: 431f42c44a7ca044699739e7cd3926df, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4828908925242560, guid: 431f42c44a7ca044699739e7cd3926df, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4828908925242560, guid: 431f42c44a7ca044699739e7cd3926df, type: 2}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 431f42c44a7ca044699739e7cd3926df, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1001 &235834768
 Prefab:
   m_ObjectHideFlags: 0
@@ -680,6 +722,60 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 444561270}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+<<<<<<< HEAD:Inspiration Game/Assets/Scenes/Level1 v2.unity
+--- !u!1 &480189255
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 480189256}
+  - component: {fileID: 480189257}
+  m_Layer: 0
+  m_Name: FodderSpawner (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &480189256
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 480189255}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.5259104, y: -24.839848, z: -30.359596}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1096374753}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &480189257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 480189255}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e45eb56eae499c14186ce32f17562cdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnemyPool: []
+  EnemyObj: {fileID: 1927911582082850, guid: 295988aabdeb03e4a98f5a9e904adae4, type: 2}
+  SpawnPoints:
+  - {fileID: 1163798251}
+  - {fileID: 1401471106}
+  - {fileID: 873838077}
+  - {fileID: 1280569916}
+  SpawnIntervals: 5
+  NumEnemies: 0
+  MaxEnemies: 4
+  IsSpawning: 0
+=======
+>>>>>>> 556e14e15a91a30e0e692825a1a6991ced5819e3:Inspiration Game/Assets/Scenes/Camera Scene.unity
 --- !u!1 &509155387
 GameObject:
   m_ObjectHideFlags: 0
@@ -808,7 +904,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
+<<<<<<< HEAD:Inspiration Game/Assets/Scenes/Level1 v2.unity
+  m_RootOrder: 4
+=======
   m_RootOrder: 5
+>>>>>>> 556e14e15a91a30e0e692825a1a6991ced5819e3:Inspiration Game/Assets/Scenes/Camera Scene.unity
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &589169608
 GameObject:
@@ -944,11 +1044,14 @@ Transform:
   m_Father: {fileID: 1096374753}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD:Inspiration Game/Assets/Scenes/Level1 v2.unity
+=======
 --- !u!4 &723470208 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4327178203407510, guid: 663e15803bceb52409f38c0293e83e4b,
     type: 2}
   m_PrefabInternal: {fileID: 1660715387}
+>>>>>>> 556e14e15a91a30e0e692825a1a6991ced5819e3:Inspiration Game/Assets/Scenes/Camera Scene.unity
 --- !u!1 &745290869
 GameObject:
   m_ObjectHideFlags: 0
@@ -1042,19 +1145,19 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4812280192821156, guid: 7d9d2cd489f12334b8c840f156d0ddb0, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -23.340002
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4812280192821156, guid: 7d9d2cd489f12334b8c840f156d0ddb0, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 18.650002
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4812280192821156, guid: 7d9d2cd489f12334b8c840f156d0ddb0, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 0.2899971
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4812280192821156, guid: 7d9d2cd489f12334b8c840f156d0ddb0, type: 2}
       propertyPath: m_LocalRotation.x
-      value: 0.47576916
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4812280192821156, guid: 7d9d2cd489f12334b8c840f156d0ddb0, type: 2}
       propertyPath: m_LocalRotation.y
@@ -1066,7 +1169,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4812280192821156, guid: 7d9d2cd489f12334b8c840f156d0ddb0, type: 2}
       propertyPath: m_LocalRotation.w
-      value: 0.8795702
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4812280192821156, guid: 7d9d2cd489f12334b8c840f156d0ddb0, type: 2}
       propertyPath: m_RootOrder
@@ -1075,7 +1178,7 @@ Prefab:
     - target: {fileID: 20216054950766448, guid: 7d9d2cd489f12334b8c840f156d0ddb0,
         type: 2}
       propertyPath: field of view
-      value: 50
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 20216054950766448, guid: 7d9d2cd489f12334b8c840f156d0ddb0,
         type: 2}
@@ -1714,8 +1817,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1065264109}
-  m_LocalRotation: {x: 0.48805127, y: 0, z: 0, w: 0.87281495}
-  m_LocalPosition: {x: -23.340002, y: 18.6, z: 0.25}
+  m_LocalRotation: {x: 0.4757691, y: 0, z: 0, w: 0.87957025}
+  m_LocalPosition: {x: -23.340002, y: 18.650002, z: 0.2899971}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1333158904}
@@ -2177,6 +2280,8 @@ Transform:
   m_PrefabParentObject: {fileID: 4582641382202108, guid: 4d3a4cd62f2bb7d438dd36ef9e25a983,
     type: 2}
   m_PrefabInternal: {fileID: 1619168474}
+<<<<<<< HEAD:Inspiration Game/Assets/Scenes/Level1 v2.unity
+=======
 --- !u!1001 &1197524846
 Prefab:
   m_ObjectHideFlags: 0
@@ -2219,6 +2324,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 4d8d46d4612c6184f93fb3795a5cd76f, type: 2}
   m_IsPrefabParent: 0
+>>>>>>> 556e14e15a91a30e0e692825a1a6991ced5819e3:Inspiration Game/Assets/Scenes/Camera Scene.unity
 --- !u!4 &1280569916 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4582641382202108, guid: 4d3a4cd62f2bb7d438dd36ef9e25a983,
@@ -2350,6 +2456,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa7155796051b734daa718462081dc5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD:Inspiration Game/Assets/Scenes/Level1 v2.unity
+  EnemyPool: []
+  EnemyObj: {fileID: 1927911582082850, guid: 295988aabdeb03e4a98f5a9e904adae4, type: 2}
+  SpawnPoints:
+  - {fileID: 1163798251}
+  - {fileID: 1401471106}
+  - {fileID: 873838077}
+  - {fileID: 1280569916}
+  SpawnIntervals: 5
+  NumEnemies: 0
+  MaxEnemies: 4
+  IsSpawning: 0
+=======
   m_BindingMode: 4
   m_FollowOffset: {x: -0.0000000048416555, y: 18.670052, z: -14.530004}
   m_XDamping: 1.5
@@ -2398,6 +2517,7 @@ Transform:
   m_PrefabParentObject: {fileID: 4582641382202108, guid: 4d3a4cd62f2bb7d438dd36ef9e25a983,
     type: 2}
   m_PrefabInternal: {fileID: 871316977}
+>>>>>>> 556e14e15a91a30e0e692825a1a6991ced5819e3:Inspiration Game/Assets/Scenes/Camera Scene.unity
 --- !u!1 &1446184447
 GameObject:
   m_ObjectHideFlags: 0
@@ -3056,7 +3176,6 @@ MonoBehaviour:
   - {fileID: 1401471106}
   - {fileID: 873838077}
   - {fileID: 1280569916}
-  - {fileID: 0}
   SpawnIntervals: 5
   NumEnemies: 0
   MaxEnemies: 4
@@ -3388,7 +3507,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.36666667
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 23800000, guid: e406cd3218eea2f4584bdbfe446f3f65, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 9983c17f4ad21534caa64f429832a337, type: 2}
 --- !u!4 &1959120743
 Transform:
   m_ObjectHideFlags: 0
