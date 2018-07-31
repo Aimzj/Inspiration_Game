@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 114942055430374300}
   m_Layer: 9
   m_Name: Fodder
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -320,11 +320,15 @@ MonoBehaviour:
   health: 1
   shootDelay: 1
   recoilDelay: 0.2
+  minTimeBetweenShots: 1
+  bulletSpawnPoint: {fileID: 0}
   rotationSpeed: 0.2
   lineOfSightDist: 15
+  numPatrolPoints: 3
+  distBetweenPatrolPoints: 15
   layerMask:
     serializedVersion: 2
-    m_Bits: 4294966783
+    m_Bits: 4294963711
   rotateWithCode: 1
   rotateWhileStill: 0
   isMoving: 1

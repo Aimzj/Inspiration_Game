@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Bullet
   - Hit
+  - Enemy
+  - Lazer
   layers:
   - Default
   - TransparentFX
@@ -17,8 +19,8 @@ TagManager:
   - 
   - Player
   - Enemy
-  - 
-  - 
+  - Spawners
+  - Zones
   - 
   - 
   - 

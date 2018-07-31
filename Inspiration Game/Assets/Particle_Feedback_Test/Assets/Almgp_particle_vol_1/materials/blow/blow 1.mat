@@ -4,7 +4,7 @@
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: blow 1
   m_Shader: {fileID: 4800000, guid: 73ea9bcc33c4f634f9152b9661a4ff15, type: 3}
@@ -80,7 +80,7 @@ Material:
     - _UVSec: 0
     - _UseVertexAlpha: 1
     - _ZWrite: 1
-    - _emmis_power: 13
+    - _emmis_power: 1.8
     - _exponent: 3
     - _power: 0
     m_Colors:
