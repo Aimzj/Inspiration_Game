@@ -48,13 +48,13 @@ public class SceneManagementScript : MonoBehaviour {
             
             canvas.ForeignInvoke("StartScreenOff", 0.5f);
 
-            Invoke("LoadTutorial",0.7f);
+            Invoke("LoadTutorial1",0.7f);
 
             Invoke("FadeIn", 0.75f);
             canvas.ForeignInvoke("GameScreenOn",1f);
            
         }
-        else if (inDevice.Action1.IsPressed && SceneManager.GetActiveScene().buildIndex == 0)//LOAD LEVEL 1
+        else if ((inDevice.Action1.IsPressed || Input.GetKeyDown(KeyCode.Alpha1)) && SceneManager.GetActiveScene().buildIndex == 0)//LOAD LEVEL 1
         {
             FadeOut();
             canvas.ForeignInvoke("StartScreenOff", 0.5f);
@@ -71,8 +71,38 @@ public class SceneManagementScript : MonoBehaviour {
 
             Invoke("QuitGame", 0.6f);
         }
+        else if (inDevice.MenuWasPressed && SceneManager.GetActiveScene().buildIndex > 0)//LEAVE TO START SCREEN
+        {
+            FadeOut();
+            canvas.ForeignInvoke("GameScreenOff", 0.5f);
 
-        
+            Invoke("LoadStart", 0.7f);
+
+            Invoke("FadeIn", 0.75f);
+            canvas.ForeignInvoke("StartScreenOn", 1f);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2) && SceneManager.GetActiveScene().buildIndex == 0)//QUIT GAME
+        {
+            FadeOut();
+            canvas.ForeignInvoke("StartScreenOff", 0.5f);
+
+            Invoke("LoadLevel2", 0.7f);
+
+            Invoke("FadeIn", 0.75f);
+            canvas.ForeignInvoke("GameScreenOn", 1f);
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha3) && SceneManager.GetActiveScene().buildIndex == 0)//QUIT GAME
+        {
+            FadeOut();
+            canvas.ForeignInvoke("StartScreenOff", 0.5f);
+
+            Invoke("LoadLevel3", 0.7f);
+
+            Invoke("FadeIn", 0.75f);
+            canvas.ForeignInvoke("GameScreenOn", 1f);
+        }
+
+
         if (enableFade &&  (fadeScreen != null))
         {
             Timer(ref screenFadeTimer,screenFadeTimerLim);
@@ -88,6 +118,13 @@ public class SceneManagementScript : MonoBehaviour {
                 enableFade = false;
             }
         }
+    }
+
+
+
+    public void LoadStart()
+    {
+        SceneManager.LoadScene(0);
     }
 
     public void LoadTutorial1()
